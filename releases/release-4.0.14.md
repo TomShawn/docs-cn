@@ -59,6 +59,23 @@ TiDB 版本：4.0.14
 
     - 支持将当前会话分享为只读的会话，禁止分享出来的会话进行修改操作 [#960](https://github.com/pingcap/tidb-dashboard/pull/960)
 
++ Tools
+
+    + Backup & Restore (BR)
+
+        - 恢复时合并小文件以提升速度 [#655](https://github.com/pingcap/br/pull/655)
+
+    + Dumpling
+
+        - 上游是 TiDB v3.x 时，使用 `_tidb_rowid` 来切分表以减低 TiDB 的内存使用 [#306](https://github.com/pingcap/dumpling/pull/306)
+
+    + TiCDC
+
+        - 改善 PD 节点缺失证书时的错误信息 [#2184](https://github.com/pingcap/ticdc/pull/2184)
+        - Sorter 发生 IO 错误时提供更友善的信息 [#1976](https://github.com/pingcap/ticdc/pull/1976)
+        - 新增 KV client 的 Region 增量扫描的并发度上限，减低 TiKV 的压力 [#1926](https://github.com/pingcap/ticdc/pull/1926)
+        - 新增表内存使用量的监控 [#1884](https://github.com/pingcap/ticdc/pull/1884)
+
 ## Bug 修复
 
 + TiDB
@@ -117,3 +134,32 @@ TiDB 版本：4.0.14
     - 修复旧的 dm 文件无法被自动清理的问题
     - 修复 SUBSTRING 函数包含特殊参数时引起进程崩溃的潜在问题
     - 修复 INT 类型转换为 TIME 类型时产生错误结果的问题
+
++ Tools
+
+    + Backup & Restore (BR)
+
+        - 修正不能恢复 `mysql` 库内的用户表的问题 [#1142](https://github.com/pingcap/br/pull/1142)
+
+    + TiDB Lightning
+
+        - 修正对 Parquet 格式 Decimal 类型的解析 [#1276](https://github.com/pingcap/br/pull/1276)
+        - 修正当启用 `strict-format = true`、且 CSV 文件不是以 `\r\n` 为结尾时出现 EOF 错误的问题 [#1188](https://github.com/pingcap/br/pull/1188)
+        - 修正当自增列类型是 FLOAT 或 DOUBLE 时，自增值会错乱的问题 [#1185](https://github.com/pingcap/br/pull/1185)
+        - 防止批量处理超过 4 GB 的 KV 数据，避免 Lightning 崩溃 [#1128](https://github.com/pingcap/br/pull/1128)
+
+    + Dumpling
+
+        - 使用 Dumpling 导出至 S3 需要 `s3:ListBucket` 权限，现在不再要求覆盖整个 Bucket，只需要覆盖导出的前缀即可 [#287](https://github.com/pingcap/dumpling/pull/287)
+
+    + TiCDC
+
+        - 修正分区表新增分区后的处理 [#2205](https://github.com/pingcap/ticdc/pull/2205)
+        - 新增 CDC 服务端配置项 `capture-session-ttl` [#2169](https://github.com/pingcap/ticdc/pull/2169)
+        - 修正 TiCDC 无法读取 `/proc/meminfo` 导致的崩溃 [#2023](https://github.com/pingcap/ticdc/pull/2023)
+        - 降低内存使用量 [#2011](https://github.com/pingcap/ticdc/pull/2011)
+        - 降低在表数量很多时 Unified Sorter 的内存使用量 [#1957](https://github.com/pingcap/ticdc/pull/1957)
+        - 修正 MySQL sink 遇到错误或暂停时，MySQL 连接会泄漏的问题 [#1945](https://github.com/pingcap/ticdc/pull/1945)
+        - 修正当 Start TS 小于 Current TS − GC TTL 时无法创建 TiCDC changefeed 的问题 [#1871](https://github.com/pingcap/ticdc/pull/1871)
+        - 减少 Sort heap 的大小，以降低 CPU 开销 [#1862](https://github.com/pingcap/ticdc/pull/1862)
+        - 修正在移动表后 Resolved TS 停止更新的问题 [#1827](https://github.com/pingcap/ticdc/pull/1827)
