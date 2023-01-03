@@ -28,7 +28,7 @@ PD Control 是 PD 的命令行工具，用于获取集群状态信息和调整�
 
 > **注意：**
 >
-> 下载链接中的 `{version}` 为 TiDB 的版本号。例如，amd64 架构的 `v6.4.0` 版本的下载链接为 `https://download.pingcap.org/tidb-community-server-v6.4.0-linux-amd64.tar.gz`。
+> 下载链接中的 `{version}` 为 TiDB 的版本号。例如，amd64 架构的 `v6.5.0` 版本的下载链接为 `https://download.pingcap.org/tidb-community-server-v6.5.0-linux-amd64.tar.gz`。
 
 ### 源码编译
 
@@ -1371,8 +1371,7 @@ store weight 1 5 10
 
 > **注意：**
 >
-> * `store limit` 命令原有的 `region-add` 和 `region-remove` 子命令已废弃，请使用 `add-peer` 和 `remove-peer` 来替代。
-> * 使用 `pd-ctl` 可以查看 TiKV 节点的状态信息，即 `Up`，`Disconnect`，`Offline`，`Down`，或 `Tombstone`。如需查看各个状态之间的关系，请参考 [TiKV Store 状态之间的关系](/tidb-scheduling.md#信息收集)。
+> 使用 `pd-ctl` 可以查看 TiKV 节点的状态信息，即 `Up`，`Disconnect`，`Offline`，`Down`，或 `Tombstone`。如需查看各个状态之间的关系，请参考 [TiKV Store 状态之间的关系](/tidb-scheduling.md#信息收集)。
 
 ### `log [fatal | error | warn | info | debug]`
 

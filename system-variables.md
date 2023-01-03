@@ -930,6 +930,8 @@ MPP 是 TiFlash 引擎提供的分布式计算框架，允许节点之间的数�
 
 > **警告：**
 >
+> 当前索引加速功能和[单条 `ALTER TABLE` 语句增删改多个列或索引](/sql-statements/sql-statement-alter-table.md)功能未完全兼容。在使用索引加速功能添加唯一索引时，请避免在单条语句添加唯一索引的同时操作其他列或者索引对象。
+> 
 > 当前索引加速功能与 [PITR (Point-in-time recovery)](/br/br-pitr-guide.md) 功能不兼容。在使用索引加速功能时，需要确保后台没有启动 PITR 备份任务，否则可能会出现非预期结果。非预期场景包括：
 >
 > - 如果先启动 PITR 备份任务，再添加索引，此时即使索引加速功能打开，也不会使用加速索引功能，但不影响索引兼容性。由于 PITR 备份任务会一直运行，相当于索引加速功能被关闭。在这种情况下，如果需要加速索引创建，你可以先停止 PITR 后台备份任务，启动并完成添加索引任务，然后再启动 PITR 后台备份任务，并做一次全量备份。
@@ -1277,7 +1279,7 @@ MPP 是 TiFlash 引擎提供的分布式计算框架，允许节点之间的数�
 - 作用域：GLOBAL
 - 是否持久化到集群：是
 - 类型：布尔型
-- 默认值：`ON`
+- 默认值：`OFF`
 - 这个变量用于控制是否开启可感知到垃圾回收的内存追踪 (GC-Aware memory track)。
 
 ### `tidb_enable_general_plan_cache` <span class="version-mark">从 v6.3.0 版本开始引入</span>
@@ -1425,9 +1427,12 @@ MPP 是 TiFlash 引擎提供的分布式计算框架，允许节点之间的数�
 
 - 作用域：SESSION | GLOBAL
 - 是否持久化到集群：是
-- 默认值：在 v6.1.0 中为 `ON`，即默认开启。在 v6.1.0 之后的版本中为 `OFF`，即默认关闭。
-- 自 v6.1.0 起，TiDB 的 [Join Reorder 算法](/join-reorder.md) 开始支持 Outer Join。该变量用于控制这个支持行为。默认关闭，即不启用 Outer Join 的 Join Reorder。
-- 对于从 v6.1.0 之前版本升级到 v6.1.0 及之后的版本，该变量的默认值为 `OFF`。对于从 v6.1.0 版本升级到之后的版本，该变量默认值为 `ON`。
+- 默认值：`ON`
+- 自 v6.1.0 起，TiDB 的 [Join Reorder 算法](/join-reorder.md)开始支持 Outer Join。该变量用于控制是否启用 Outer Join 的 Join Reorder。
+- 对于从较低版本升级到当前版本的 TiDB：
+
+    - 如果升级前 TiDB 的版本低于 v6.1.0，升级后该变量的默认值为 `ON`。
+    - 如果升级前 TiDB 的版本等于或大于 v6.1.0，升级后该变量的默认值跟随升级前的设定值。
 
 ### `tidb_enable_ordered_result_mode`
 
@@ -3247,6 +3252,114 @@ Query OK, 0 rows affected, 1 warning (0.00 sec)
 > **注意：**
 >
 > 如果 PD leader 的 TSO RPC 延迟升高，但其现象并非由 CPU 使用率达到瓶颈而导致（可能存在网络等问题），此时，调高 `tidb_tso_client_batch_max_wait_time` 可能会导致 TiDB 的语句执行延迟上升，影响集群的 QPS 表现。
+
+### `tidb_ttl_delete_rate_limit` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 是否持久化到集群：是
+- 默认值：`0`
+- 范围：`[0, 9223372036854775807]`
+- 这个变量用来对每个 TiDB 节点的 TTL 删除操作进行限流。其值代表了在 TTL 任务中单个节点每秒允许 `DELETE` 语句执行的最大次数。当此变量设置为 `0` 时，则表示不做限制。
+
+### `tidb_ttl_delete_batch_size` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 是否持久化到集群：是
+- 默认值：`100`
+- 范围：`[1, 10240]`
+- 这个变量用于设置 TTL 任务中单个删除事务中允许删除的最大行数。
+
+### `tidb_ttl_delete_worker_count` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 是否持久化到集群：是
+- 默认值：`4`
+- 范围：`[1, 256]`
+- 这个变量用于设置每个 TiDB 节点上 TTL 删除任务的最大并发数。
+
+### `tidb_ttl_job_enable` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 是否持久化到集群：是
+- 默认值：`ON`
+- 类型：布尔型
+- 这个变量用于控制是否启动 TTL 后台清理任务。如果设置为 `OFF`，所有具有 TTL 属性的表会自动停止对过期数据的清理。
+
+### `tidb_ttl_scan_batch_size` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 是否持久化到集群：是
+- 默认值：`500`
+- 范围：`[1, 10240]`
+- 这个变量用于设置 TTL 任务中用来扫描过期数据的每个 `SELECT` 语句的 `LIMIT` 的值。 
+
+### `tidb_ttl_scan_worker_count` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 是否持久化到集群：是
+- 默认值：`4`
+- 范围：`[1, 256]`
+- 这个变量用于设置每个 TiDB 节点 TTL 扫描任务的最大并发数。
+
+### `tidb_ttl_job_run_interval` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 是否持久化到集群：是
+- 默认值：`1h0m0s`
+- 范围：`[10m0s, 8760h0m0s]`
+- 这个变量用于控制 TTL 后台清理任务的调度周期。比如，如果当前值设置成了 `1h0m0s`，则代表每张设置了 TTL 属性的表会每小时清理一次过期数据。
+
+### `tidb_ttl_job_schedule_window_start_time` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 类型：时间
+- 是否持久化到集群：是
+- 默认值：`00:00 +0000`
+- 这个变量用于控制 TTL 后台清理任务的调度窗口的起始时间。请谨慎调整此参数，过小的窗口有可能会造成过期数据的清理无法完成。
+
+### `tidb_ttl_job_schedule_window_end_time` <span class="version-mark">从 v6.5.0 版本开始引入</span>
+
+> **警告：**
+>
+> [TTL](/time-to-live.md) 目前为实验性特性，此变量定义可能在之后发生变化或者删除。
+
+- 作用域：GLOBAL
+- 类型：时间
+- 是否持久化到集群：是
+- 默认值：`23:59 +0000`
+- 这个变量用于控制 TTL 后台清理任务的调度窗口的结束时间。请谨慎调整此参数，过小的窗口有可能会造成过期数据的清理无法完成。
 
 ### `tidb_txn_assertion_level` <span class="version-mark">从 v6.0.0 版本开始引入</span>
 
