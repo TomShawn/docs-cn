@@ -13,19 +13,22 @@
 | 文档仓库 branch | 对应 TiDB 文档版本 |
 |:---------|:----------|
 | [`master`](https://github.com/pingcap/docs-cn/tree/master) | dev 最新开发版 |
+| [`release-6.6`](https://github.com/pingcap/docs-cn/tree/release-6.6) | 6.6 开发里程碑版 (DMR) |
+| [`release-6.5`](https://github.com/pingcap/docs-cn/tree/release-6.5) | 6.5 长期支持版 (LTS) |
+| [`release-6.4`](https://github.com/pingcap/docs-cn/tree/release-6.4) | 6.4 开发里程碑版 (DMR) |
 | [`release-6.3`](https://github.com/pingcap/docs-cn/tree/release-6.3) | 6.3 开发里程碑版 (DMR) |
-| [`release-6.2`](https://github.com/pingcap/docs-cn/tree/release-6.2) | 6.2 开发里程碑版 (DMR) |
+| [`release-6.2`](https://github.com/pingcap/docs-cn/tree/release-6.2) | 6.2 开发里程碑版 (DMR)，已归档，不接受修改 |
 | [`release-6.1`](https://github.com/pingcap/docs-cn/tree/release-6.1) | 6.1 长期支持版 (LTS) |
-| [`release-6.0`](https://github.com/pingcap/docs-cn/tree/release-6.0) | 6.0 开发里程碑版 (DMR) |
+| [`release-6.0`](https://github.com/pingcap/docs-cn/tree/release-6.0) | 6.0 开发里程碑版 (DMR)，已归档，不接受修改 |
 | [`release-5.4`](https://github.com/pingcap/docs-cn/tree/release-5.4) | 5.4 稳定版 |
 | [`release-5.3`](https://github.com/pingcap/docs-cn/tree/release-5.3) | 5.3 稳定版 |
 | [`release-5.2`](https://github.com/pingcap/docs-cn/tree/release-5.2) | 5.2 稳定版 |
 | [`release-5.1`](https://github.com/pingcap/docs-cn/tree/release-5.1) | 5.1 稳定版 |
 | [`release-5.0`](https://github.com/pingcap/docs-cn/tree/release-5.0) | 5.0 稳定版 |
 | [`release-4.0`](https://github.com/pingcap/docs-cn/tree/release-4.0) | 4.0 稳定版 |
-| [`release-3.1`](https://github.com/pingcap/docs-cn/tree/release-3.1) | 3.1 稳定版 |
+| [`release-3.1`](https://github.com/pingcap/docs-cn/tree/release-3.1) | 3.1 稳定版，已归档，不接受修改 |
 | [`release-3.0`](https://github.com/pingcap/docs-cn/tree/release-3.0) | 3.0 稳定版 |
-| [`release-2.1`](https://github.com/pingcap/docs-cn/tree/release-2.1) | 2.1 稳定版 |
+| [`release-2.1`](https://github.com/pingcap/docs-cn/tree/release-2.1) | 2.1 稳定版，已归档，不接受修改 |
 
 ## 贡献文档
 
