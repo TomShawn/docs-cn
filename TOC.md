@@ -156,6 +156,11 @@
       - [使用 Dumpling 和 TiDB Lightning 备份与恢复](/backup-and-restore-using-dumpling-lightning.md)
       - [备份与恢复 RawKV](/br/rawkv-backup-and-restore.md)
       - [增量备份与恢复](/br/br-incremental-guide.md)
+  - 集群容灾
+    - [容灾方案介绍](/dr-solution-introduction.md)
+    - [基于主备集群的容灾](/dr-secondary-cluster.md)
+    - [基于多副本的单集群容灾](/dr-multi-replica.md)
+    - [基于备份与恢复的容灾](/dr-backup-restore.md)
   - [使用资源管控 (Resource Control) 实现资源隔离](/tidb-resource-control.md)
   - [修改时区](/configure-time-zone.md)
   - [日常巡检](/daily-check.md)
@@ -596,6 +601,7 @@
     - [RocksDB 简介](/storage-engine/rocksdb-overview.md)
     - [Titan 简介](/storage-engine/titan-overview.md)
     - [Titan 配置说明](/storage-engine/titan-configuration.md)
+    - [分区 Raft KV](/partitioned-raft-kv.md)
   - 存储引擎 TiFlash
     - [TiFlash 简介](/tiflash/tiflash-overview.md)
     - [构建 TiFlash 副本](/tiflash/create-tiflash-replicas.md)
@@ -961,7 +967,7 @@
   - [TiDB 版本规则](/releases/versioning.md)
   - [TiDB 离线包](/binary-package.md)
   - v6.6
-    - [6.6.0](/releases/release-6.6.0.md)
+    - [6.6.0-DMR](/releases/release-6.6.0.md)
   - v6.5
     - [6.5.0](/releases/release-6.5.0.md)
   - v6.4
